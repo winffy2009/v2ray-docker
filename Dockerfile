@@ -1,5 +1,5 @@
 FROM alpine:3.5
-ENV CONFIG_JSON=none
+ENV OCNFIG_JSON=none
 RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
  && curl -L -H "Cache-Control: no-cache" -o /v2ray.zip https://github.com/v2ray/v2ray-core/releases/latest/download/v2ray-linux-64.zip \
  && mkdir /usr/bin/v2ray /etc/v2ray \
@@ -7,8 +7,12 @@ RUN apk add --no-cache --virtual .build-deps ca-certificates curl \
  && unzip /v2ray.zip -d /usr/bin/v2ray \
  && rm -rf /v2ray.zip /usr/bin/v2ray/*.sig /usr/bin/v2ray/doc /usr/bin/v2ray/*.json /usr/bin/v2ray/*.dat /usr/bin/v2ray/sys* \
  && chgrp -R 0 /etc/v2ray \
- && chmod -R g+rwX /etc/v2ray
-ADD configure.sh /configure.sh
-RUN chmod +x /configure.sh
+ && chmod -R g+rwX /etc/v2ray\
+ && echo -E "cat <<-EOF > /etc/v2ray/config.json" >/1.sh\
+ && echo -E "\$OCNFIG_JSON" >>/1.sh\
+ && echo -E "EOF">>/1.sh \
+ && chmod +x /configure.sh
+#ADD configure.sh /configure.sh
+#RUN chmod +x /configure.sh
 ENTRYPOINT ["sh", "/configure.sh"]
 EXPOSE 8080
