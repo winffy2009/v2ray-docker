@@ -1,5 +1,5 @@
 FROM alpine:3.5
-ENV COCNFIG_JSON=none
+ENV CONCFIG_JSON=none
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
  && apk add --no-cache --virtual .build-deps ca-certificates curl \
  && mkdir /usr/bin/v2ray /etc/v2ray \
